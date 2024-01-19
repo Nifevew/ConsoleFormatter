@@ -22,6 +22,8 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 
+#
+
 add_executable(
         TextColorTest
         test/TextStyleTest.cpp
@@ -34,3 +36,17 @@ target_link_libraries(
 
 include(GoogleTest)
 gtest_discover_tests(TextColorTest)
+
+# Test for TextCustomManipSuite
+
+add_executable(
+        TextCustomManipSuite
+        test/TextCustomManipSuite.cpp
+)
+
+target_link_libraries(
+        TextCustomManipSuite
+        GTest::gtest_main
+)
+
+gtest_discover_tests(TextCustomManipSuite)
