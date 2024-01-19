@@ -34,15 +34,6 @@ enum class TextStyle
   NO_NEGATIVE = 27
 };
 
-inline std::ostream& operator<<(std::ostream& out, TextStyle&& ts)
-{
-  out << ESC
-    << '['
-    << std::to_string(static_cast<int>(ts))
-    << 'm';
-
-  return out;
-}
 
 enum class TextColor
 {
@@ -69,19 +60,6 @@ enum class TextColor
 };
 
 
-inline std::ostream& operator<<(std::ostream& out, TextColor&& tc)
-{
-  out << ESC
-    << '['
-    << std::to_string(static_cast<int>(tc))
-    << 'm';
-
-  return out;
-}
-
-}
-
-
 template<typename T>
 concept IsTextColor = std::same_as<T, tf::TextColor>;
 
@@ -93,7 +71,7 @@ concept ParamsRequires = ((IsTextColor<Args> || IsTextStyle<Args>) && ...);
 
 template <typename... Ts>
 requires ParamsRequires<Ts...>
-std::string makeParams(Ts && ... params)
+std::string makeParams(const Ts &... params)
 {
   std::string result;
 
@@ -102,6 +80,58 @@ std::string makeParams(Ts && ... params)
 
   result.pop_back();
   return result;
+}
+
+inline std::ostream& operator<<(std::ostream& out, TextStyle&& ts)
+{
+  out << ESC
+      << '['
+      << makeParams(ts)
+      << 'm';
+
+  return out;
+}
+
+inline std::ostream& operator<<(std::ostream& out, TextColor&& tc)
+{
+  out << ESC
+    << '['
+    << makeParams(tc)
+    << 'm';
+
+  return out;
+}
+
+
+//  Кастомный манипулятор вывода
+template<typename... Ts>
+struct TextParamManip
+{
+  explicit TextParamManip(const Ts &... params)
+  {
+    this->params = makeParams(params...);
+  }
+
+  std::string params;
+};
+
+template<typename... Ts>
+inline TextParamManip<Ts...> setTextParams(const Ts &... params) noexcept
+{
+  return TextParamManip(params...);
+}
+
+template<typename... Ts>
+inline std::ostream& operator<<(std::ostream& out, const TextParamManip<Ts...>& t_params)
+{
+  out << ESC
+      << '['
+      << t_params.params
+      << 'm';
+
+  return out;
+}
+
 }
 
 #endif //CONSOLE_FORMATTER_INCLUDE_TEXTFORMATTING_HPP_
