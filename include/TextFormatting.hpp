@@ -8,7 +8,6 @@
 #include <iostream>
 #include <string>
 
-
 namespace tf
 {
 
@@ -41,6 +40,7 @@ inline std::ostream& operator<<(std::ostream& out, TextStyle&& ts)
     << '['
     << std::to_string(static_cast<int>(ts))
     << 'm';
+
   return out;
 }
 
@@ -72,14 +72,36 @@ enum class TextColor
 inline std::ostream& operator<<(std::ostream& out, TextColor&& tc)
 {
   out << ESC
-      << '['
-      << std::to_string(static_cast<int>(tc))
-      << 'm';
+    << '['
+    << std::to_string(static_cast<int>(tc))
+    << 'm';
+
   return out;
 }
 
 }
 
 
+template<typename T>
+concept IsTextColor = std::same_as<T, tf::TextColor>;
+
+template<typename T>
+concept IsTextStyle = std::same_as<T, tf::TextStyle>;
+
+template<typename... Args>
+concept ParamsRequires = ((IsTextColor<Args> || IsTextStyle<Args>) && ...);
+
+template <typename... Ts>
+requires ParamsRequires<Ts...>
+std::string makeParams(Ts && ... params)
+{
+  std::string result;
+
+  for (const auto& arg : {static_cast<int>(params)...})
+    result += std::to_string(arg) + ";";
+
+  result.pop_back();
+  return result;
+}
 
 #endif //CONSOLE_FORMATTER_INCLUDE_TEXTFORMATTING_HPP_
