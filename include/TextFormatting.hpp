@@ -17,7 +17,7 @@ const std::string ESC = "\x1b";
 enum class TextStyle
 {
 
-  DEFAULT = 0,
+  RESET = 0,
 
   BOLD = 1,
   DIM = 2,
@@ -62,6 +62,32 @@ enum class TextColor
   BRIGHT_MAGENTA = 95,
   BRIGHT_CYAN = 96,
   BRIGHT_WHITE = 97
+
+};
+
+enum class BackgroundColor
+{
+
+  BLACK = 40,
+  RED = 41,
+  GREEN = 42,
+  YELLOW = 43,
+  BLUE = 44,
+  MAGENTA = 45,
+  CYAN = 46,
+  WHITE = 47,
+
+  DEFAULT = 49,
+
+  BRIGHT_BLACK = 100,
+  BRIGHT_RED = 101,
+  BRIGHT_GREEN = 102,
+  BRIGHT_YELLOW = 103,
+  BRIGHT_BLUE = 104,
+  BRIGHT_MAGENTA = 105,
+  BRIGHT_CYAN = 106,
+  BRIGHT_WHITE = 107
+
 };
 
 
@@ -71,8 +97,11 @@ concept IsTextColor = std::same_as<T, tf::TextColor>;
 template<typename T>
 concept IsTextStyle = std::same_as<T, tf::TextStyle>;
 
+template<typename T>
+concept IsBackgroundColor = std::same_as<T, tf::BackgroundColor>;
+
 template<typename... Args>
-concept ParamsRequires = ((IsTextColor<Args> || IsTextStyle<Args>) && ...);
+concept ParamsRequires = ((IsTextColor<Args> || IsTextStyle<Args> || IsBackgroundColor<Args>) && ...);
 
 template <typename... Ts>
 requires ParamsRequires<Ts...>
