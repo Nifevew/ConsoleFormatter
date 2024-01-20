@@ -8,30 +8,35 @@
 #include <iostream>
 #include <string>
 
+
 namespace tf
 {
-
-//enum class Sequences
-//{
-//  ESC = 27
-//};
 
 const std::string ESC = "\x1b";
 
 enum class TextStyle
 {
+
   DEFAULT = 0,
 
   BOLD = 1,
-  BRIGHT = 1,
-  NO_BOLD = 22,
-  NO_BRIGHT = 22,
-
+  DIM = 2,
+  ITALIC = 3,
   UNDERLINE = 4,
-  NO_UNDERLINE = 24,
+  BLINKING = 5,
+  INVERSE = 7,
+  HIDDEN = 8,
+  STRIKETHROUGH = 9,
 
-  NEGATIVE = 7,
-  NO_NEGATIVE = 27
+  NO_BOLD = 21,
+  NO_DIM = 22,
+  NO_ITALIC = 23,
+  NO_UNDERLINE = 24,
+  NO_BLINKING = 25,
+  NO_INVERSE = 27,
+  NO_HIDDEN = 28,
+  NO_STRIKETHROUGH = 29
+
 };
 
 
@@ -108,9 +113,7 @@ template<typename... Ts>
 struct TextParamManip
 {
   explicit TextParamManip(const Ts &... params)
-  {
-    this->params = makeParams(params...);
-  }
+  { this->params = makeParams(params...); }
 
   std::string params;
 };
