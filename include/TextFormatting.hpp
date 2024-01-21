@@ -92,28 +92,51 @@ enum class BackgroundColor
 
 
 template<typename T>
-concept IsTextColor = std::same_as<T, tf::TextColor>;
+concept IsTextColor = std::same_as<std::remove_cvref_t<T>, tf::TextColor>;
 
 template<typename T>
-concept IsTextStyle = std::same_as<T, tf::TextStyle>;
+concept IsTextStyle = std::same_as<std::remove_cvref_t<T>, tf::TextStyle>;
 
 template<typename T>
-concept IsBackgroundColor = std::same_as<T, tf::BackgroundColor>;
+concept IsBackgroundColor = std::same_as<std::remove_cvref_t<T>, tf::BackgroundColor>;
+
+template<typename T>
+concept IsEnums = (IsTextColor<T> || IsTextStyle<T> || IsBackgroundColor<T>);
+
+template<typename T>
+concept Is256Color = std::signed_integral<T>;
 
 template<typename... Args>
-concept ParamsRequires = ((IsTextColor<Args> || IsTextStyle<Args> || IsBackgroundColor<Args>) && ...);
+concept ParamsRequires = ((IsEnums<Args> || Is256Color<Args>) && ...);
 
-template <typename... Ts>
-requires ParamsRequires<Ts...>
-std::string makeParams(const Ts &... params)
+template<typename T>
+requires ParamsRequires<T>
+std::string makeParams(const T& param)
 {
+  const std::string k256ColorTextCode = "38;5;";
+  const std::string k256ColorBgCode = "48;5;";
+
   std::string result;
 
-  for (const auto& arg : {static_cast<int>(params)...})
-    result += std::to_string(arg) + ";";
+  if (IsEnums<decltype(param)>)
+    result += std::to_string(static_cast<int>(param));
+  else if (static_cast<int>(param) > 0)
+    result += k256ColorTextCode + std::to_string(static_cast<int>(param));
+  else
+    result += k256ColorBgCode + std::to_string(static_cast<int>(param) * -1);
 
-  result.pop_back();
   return result;
+}
+
+template<typename T, typename... Ts>
+requires ParamsRequires<T> && ParamsRequires<Ts...>
+std::string makeParams(const T& param, const Ts &... params)
+{
+  auto out = makeParams(param) + ';';
+  out += makeParams(params...) + ';';
+
+  out.pop_back();
+  return out;
 }
 
 inline std::ostream& operator<<(std::ostream& out, TextStyle&& ts)
