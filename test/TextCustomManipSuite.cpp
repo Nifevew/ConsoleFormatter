@@ -74,6 +74,90 @@ TEST(TextFormattingTextCustomManipSuite, TwoBackground)
   EXPECT_EQ(test_str, true_str);
 }
 
+TEST(TextFormattingTextCustomManipSuite, One256Color)
+{
+  std::stringstream ss;
+
+  ss << tf::setTextParams(1) << "TEST_TEXT";
+  std::string test_str { ss.str() };
+
+  std::string true_str { "\x1b[38;5;1mTEST_TEXT" };
+
+  EXPECT_EQ(test_str, true_str);
+}
+
+TEST(TextFormattingTextCustomManipSuite, Two256Color)
+{
+  std::stringstream ss;
+
+  ss << tf::setTextParams(45, 66) << "TEST_TEXT";
+  std::string test_str { ss.str() };
+
+  std::string true_str { "\x1b[38;5;45;38;5;66mTEST_TEXT" };
+
+  EXPECT_EQ(test_str, true_str);
+}
+
+TEST(TextFormattingTextCustomManipSuite, One256BgColor)
+{
+  std::stringstream ss;
+
+  ss << tf::setTextParams(-1) << "TEST_TEXT";
+  std::string test_str { ss.str() };
+
+  std::string true_str { "\x1b[48;5;1mTEST_TEXT" };
+
+  EXPECT_EQ(test_str, true_str);
+}
+
+TEST(TextFormattingTextCustomManipSuite, Two256BgColor)
+{
+  std::stringstream ss;
+
+  ss << tf::setTextParams(-45, -66) << "TEST_TEXT";
+  std::string test_str { ss.str() };
+
+  std::string true_str { "\x1b[48;5;45;48;5;66mTEST_TEXT" };
+
+  EXPECT_EQ(test_str, true_str);
+}
+
+TEST(TextFormattingTextCustomManipSuite, BgAndText256Color)
+{
+  std::stringstream ss;
+
+  ss << tf::setTextParams(-45, 66) << "TEST_TEXT";
+  std::string test_str { ss.str() };
+
+  std::string true_str { "\x1b[48;5;45;38;5;66mTEST_TEXT" };
+
+  EXPECT_EQ(test_str, true_str);
+}
+
+TEST(TextFormattingTextCustomManipSuite, TextAndBg256Color)
+{
+  std::stringstream ss;
+
+  ss << tf::setTextParams(45, -66) << "TEST_TEXT";
+  std::string test_str { ss.str() };
+
+  std::string true_str { "\x1b[38;5;45;48;5;66mTEST_TEXT" };
+
+  EXPECT_EQ(test_str, true_str);
+}
+
+TEST (TextFormattingTextCustomManipSuite, ThreeParams)
+{
+  std::stringstream ss;
+
+  ss << tf::setTextParams(tf::BackgroundColor::BLUE, tf::BackgroundColor::WHITE, tf::TextStyle::ITALIC) << "TEST_TEXT";
+  std::string test_str { ss.str() };
+
+  std::string true_str { "\x1b[44;47;3mTEST_TEXT" };
+
+  EXPECT_EQ(test_str, true_str);
+}
+
 TEST(TextFormattingTextCustomManipSuite, StyleColor)
 {
   std::stringstream ss;
@@ -130,6 +214,54 @@ TEST(TextFormattingTextCustomManipSuite, ColorBackgroundStyle)
   std::string test_str { ss.str() };
 
   std::string true_str { "\x1b[31;43;1mTEST_TEXT" };
+
+  EXPECT_EQ(test_str, true_str);
+}
+
+TEST(TextFormattingTextCustomManipSuite, Color256BackgroundStyle)
+{
+  std::stringstream ss;
+
+  ss << tf::setTextParams( 3, tf::BackgroundColor::YELLOW, tf::TextStyle::BOLD) << "TEST_TEXT";
+  std::string test_str { ss.str() };
+
+  std::string true_str { "\x1b[38;5;3;43;1mTEST_TEXT" };
+
+  EXPECT_EQ(test_str, true_str);
+}
+
+TEST(TextFormattingTextCustomManipSuite, Background256ColorStyle)
+{
+  std::stringstream ss;
+
+  ss << tf::setTextParams(tf::BackgroundColor::YELLOW, 3, tf::TextStyle::BOLD) << "TEST_TEXT";
+  std::string test_str { ss.str() };
+
+  std::string true_str { "\x1b[43;38;5;3;1mTEST_TEXT" };
+
+  EXPECT_EQ(test_str, true_str);
+}
+
+TEST(TextFormattingTextCustomManipSuite, BackgroundStyle256Color)
+{
+  std::stringstream ss;
+
+  ss << tf::setTextParams(tf::BackgroundColor::YELLOW, tf::TextStyle::BOLD, 3) << "TEST_TEXT";
+  std::string test_str { ss.str() };
+
+  std::string true_str { "\x1b[43;1;38;5;3mTEST_TEXT" };
+
+  EXPECT_EQ(test_str, true_str);
+}
+
+TEST(TextFormattingTextCustomManipSuite, BgAndText256ColorStyle)
+{
+  std::stringstream ss;
+
+  ss << tf::setTextParams(-54, 43, tf::TextStyle::ITALIC) << "TEST_TEXT";
+  std::string test_str { ss.str() };
+
+  std::string true_str { "\x1b[48;5;54;38;5;43;3mTEST_TEXT" };
 
   EXPECT_EQ(test_str, true_str);
 }
