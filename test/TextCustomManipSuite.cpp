@@ -265,3 +265,15 @@ TEST(TextFormattingTextCustomManipSuite, BgAndText256ColorStyle)
 
   EXPECT_EQ(test_str, true_str);
 }
+
+TEST(TextFormattingTextCustomManipSuite,Reset)
+{
+  std::stringstream ss;
+
+  ss << tf::setTextParams(-54, 43, tf::TextStyle::ITALIC) << "TEST_TEXT" << tf::reset << "CLEAR_TEXT";
+  std::string test_str { ss.str() };
+
+  std::string true_str { "\x1b[48;5;54;38;5;43;3mTEST_TEXT\x1b[0mCLEAR_TEXT" };
+
+  EXPECT_EQ(test_str, true_str);
+}
