@@ -8,7 +8,7 @@ include_directories(./include)
 set(HEADERS TextFormatting.hpp)
 
 
-add_executable(console_formatter main.cpp ./include)
+add_executable(console_formatter demo.cpp ./include)
 
 # GoogleTest
 include(FetchContent)
