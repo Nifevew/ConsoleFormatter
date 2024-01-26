@@ -1,7 +1,3 @@
-//
-// Created by maxya on 19.01.2024.
-//
-
 #ifndef CONSOLE_FORMATTER_INCLUDE_TEXTFORMATTING_HPP_
 #define CONSOLE_FORMATTER_INCLUDE_TEXTFORMATTING_HPP_
 
@@ -17,8 +13,6 @@ const std::string ESC = "\x1b";
 enum class TextStyle
 {
 
-  RESET = 0,
-
   BOLD = 1,
   DIM = 2,
   ITALIC = 3,
@@ -28,7 +22,7 @@ enum class TextStyle
   HIDDEN = 8,
   STRIKETHROUGH = 9,
 
-  NO_BOLD = 21,
+  NO_BOLD = 22,
   NO_DIM = 22,
   NO_ITALIC = 23,
   NO_UNDERLINE = 24,
@@ -159,6 +153,10 @@ inline std::ostream& operator<<(std::ostream& out, TextColor&& tc)
   return out;
 }
 
+inline std::ostream& reset(std::ostream& output)
+{
+  return (output << ESC << "[0m");
+}
 
 //  Кастомный манипулятор вывода
 template<typename... Ts>
