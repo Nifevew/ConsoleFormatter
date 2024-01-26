@@ -4,7 +4,6 @@
 #include <iostream>
 #include <string>
 
-
 namespace tf
 {
 
@@ -149,6 +148,16 @@ inline std::ostream& operator<<(std::ostream& out, TextColor&& tc)
     << '['
     << makeParams(tc)
     << 'm';
+
+  return out;
+}
+
+inline std::ostream& operator<<(std::ostream& out, BackgroundColor&& bc)
+{
+  out << ESC
+      << '['
+      << makeParams(bc)
+      << 'm';
 
   return out;
 }
