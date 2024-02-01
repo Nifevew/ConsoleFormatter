@@ -11,7 +11,7 @@ Currently, the library supports only Graphics Mode and colors for Foreground and
 
 The `<<` operator is overloaded for each enumeration, so you can write like this.
 ```c++
-std::cout << tf::TextStyle::GREEN << "GREEN_TEXT";
+std::cout << tf::TextColor::GREEN << "GREEN_TEXT";
 ```
 
 
@@ -77,26 +77,26 @@ std::cout << tf::TextStyle::BLINKING << "BLINKING_TEXT" << tf::TextStyle::NO_BLI
 
 You can choose the same term (they have common meanings).
 ```
-    tf::TextStyle::BLACK
-    tf::TextStyle::RED
-    tf::TextStyle::GREEN
-    tf::TextStyle::YELLOW
-    tf::TextStyle::BLUE
-    tf::TextStyle::MAGENTA
-    tf::TextStyle::CYAN
-    tf::TextStyle::WHITE
+    tf::TextColor::BLACK
+    tf::TextColor::RED
+    tf::TextColor::GREEN
+    tf::TextColor::YELLOW
+    tf::TextColor::BLUE
+    tf::TextColor::MAGENTA
+    tf::TextColor::CYAN
+    tf::TextColor::WHITE
 ```
 
 Terminals that support the _aixterm specification_ provides bright versions of the ISO colors, without the need to use the `bold` modifier.
 ```
-    tf::TextStyle::BRIGHT_BLACK
-    tf::TextStyle::BRIGHT_RED
-    tf::TextStyle::BRIGHT_GREEN
-    tf::TextStyle::BRIGHT_YELLOW
-    tf::TextStyle::BRIGHT_BLUE
-    tf::TextStyle::BRIGHT_MAGENTA
-    tf::TextStyle::BRIGHT_CYAN
-    tf::TextStyle::BRIGHT_WHITE
+    tf::TextColor::BRIGHT_BLACK
+    tf::TextColor::BRIGHT_RED
+    tf::TextColor::BRIGHT_GREEN
+    tf::TextColor::BRIGHT_YELLOW
+    tf::TextColor::BRIGHT_BLUE
+    tf::TextColor::BRIGHT_MAGENTA
+    tf::TextColor::BRIGHT_CYAN
+    tf::TextColor::BRIGHT_WHITE
 ```
 
 To disable the color, use `tf::textColor::DEFAULT` or `tf::reset` for the `<<` operator.
